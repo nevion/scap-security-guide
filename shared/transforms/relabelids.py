@@ -64,6 +64,8 @@ def create_xccdf_id_to_cce_id_mapping(xccdftree):
                 cceid = identcce.text
                 xccdftocce_idmapping[xccdfid] = cceid
 
+    #from IPython import embed; embed()
+
     return xccdftocce_idmapping
 
 
@@ -141,6 +143,8 @@ def ensure_by_xccdf_referenced_oval_def_is_defined_in_oval_file(xccdftree, ovalt
                         if checkcontentref_hrefattr.startswith('http'):
                             continue
 
+                        #print 'checkcontentref found for %s'%(xccdfid,)
+                        #from IPython import embed; embed()
                         # For local OVAL drop the reference to OVAL definition from XCCDF document
                         # in the case:
                         # * OVAL definition is referenced from XCCDF file,
@@ -303,6 +307,7 @@ def main():
 
     # Rename all IDs in the oval file
     if ovalfile:
+        print 'ovalfile: ',ovalfile
         ovaltree = parse_xml_file(ovalfile)
 
         # Add new <reference source="CCE" ref_id="CCE-ID" /> element to those OVAL
@@ -332,6 +337,7 @@ def main():
 
         ovaltree = translator.translate(ovaltree, store_defname=True)
         newovalfile = ovalfile.replace("unlinked", idname)
+        print 'new ovalfile', newovalfile, idname
         ET.ElementTree(ovaltree).write(newovalfile)
 
     # Rename all IDs in the ocil file
